@@ -1,0 +1,95 @@
+# This is a sample Python script.
+
+# Press Shift+F10 to execute it or replace it with your code.
+# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+
+
+#邻接矩阵
+m=float('inf')
+r0=[0,1,5,m,m,m,m,m,m]
+r1=[1,0,3,7,5,m,m,m,m]
+r2=[5,3,0,m,1,7,m,m,m]
+r3=[m,7,m,0,2,m,3,m,m]
+r4=[m,5,1,2,0,3,6,9,m]
+r5=[m,m,7,m,3,0,m,5,m]
+r6=[m,m,m,3,6,m,0,2,7]
+r7=[m,m,m,m,9,5,2,0,4]
+r8=[m,m,m,m,m,m,7,4,0]
+
+r=[r0,r1,r2,r3,r4,r5,r6,r7,r8]
+
+#打印邻接矩阵
+
+# for list in r:
+#     for item in list:
+#         print(item,end="\t")
+#     print()
+
+#获得队列矩阵
+
+path=[[0 for i in range(9)] for j in range(9)]
+
+for i in range(9):
+    for j in range(9):
+        if r[i][j]!=0 and r[i][j]!=m:
+            path[i][j]=j
+
+#计算获得距离矩阵并打印
+
+for x in range(9):
+    for i in range(9):
+        for j in range(9):
+            if r[i][x]+r[x][j]<r[i][j]:
+                r[i][j]=r[i][x]+r[x][j]
+                path[i][j]=path[i][x]
+for i in range(9):
+    for j in range(9):
+        print(r[i][j],end="\t")
+    print()
+
+# 此时的r已经是距离矩阵
+
+#为地点A-I赋值
+
+p={"A":0,"B":1,"C":2,"D":3,"E":4,"F":5,"G":6,"H":7,"I":8}
+
+places=[]
+n=0
+print("（输入q退出）")
+k=input("输入您的起点：")
+places.append(k)
+while places[n]!='q':
+    k=input("输入您想要游览的地点：")
+    if k!='q':
+        if p.get(k, 0) == 0:
+            print("输入地点错误，请重新输入")
+        else:
+            places.append(k)
+            n += 1
+    else:
+        print("输入完啦，开始计算最优路线")
+        break
+
+print(places)
+
+
+#计算路程
+
+start="A"
+places.remove(start)
+n=len(places)
+rount=[start]
+length=0
+
+for i in range(n): #一共比较n轮
+    list=[]
+    for j in range(len(places)):
+        list.append(r[p[start]][p[places[j]]])
+    length += min(list)
+    index_min = list.index(min(list))
+    start = places[index_min]
+    places.remove(start)
+    rount.append(start)
+
+print(length)
+print(rount)
